@@ -4,6 +4,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import helmet from "@fastify/helmet";
 import root from "./routes/root";
 import { authRoutes } from "./routes/auth.route";
+import { timeRoutes } from "./routes/time.route";
 
 export async function createApp() {
   const app = Fastify({
@@ -48,6 +49,7 @@ export async function createApp() {
   // Register routes
   app.register(root, { prefix: "/" });
   app.register(authRoutes);
+  app.register(timeRoutes);
 
   // Global error handler
   app.setErrorHandler((error, request, reply) => {
