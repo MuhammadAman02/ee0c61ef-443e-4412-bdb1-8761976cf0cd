@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { AppError } from '../utils/AppError';
 
 interface WorldTimeResponse {
@@ -17,13 +16,17 @@ export async function getCurrentTime(timezone?: string) {
       ? `http://worldtimeapi.org/api/timezone/${timezone}`
       : 'http://worldtimeapi.org/api/ip';
     
+    console.log(`Fetching time from: ${url}`);
+    
     const response = await fetch(url);
     
     if (!response.ok) {
+      console.error(`API response not ok: ${response.status} ${response.statusText}`);
       throw new AppError(`Failed to fetch time: ${response.statusText}`, response.status);
     }
     
     const data = await response.json() as WorldTimeResponse;
+    console.log('Time data received:', data);
     
     return {
       current_time: data.datetime,
@@ -35,6 +38,7 @@ export async function getCurrentTime(timezone?: string) {
       week_number: data.week_number,
     };
   } catch (error: any) {
+    console.error('Error in getCurrentTime:', error);
     if (error instanceof AppError) {
       throw error;
     }
